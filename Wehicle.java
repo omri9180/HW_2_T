@@ -9,6 +9,10 @@ public abstract class Wehicle extends Thread{
         this.type = type;
     }
 
+    public abstract void wehicleArraiv();
+    public abstract void wehicleEnter_washer();
+    public abstract void wehicle_finish();
+
     @Override
     public void run() {
         try {
