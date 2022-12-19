@@ -10,7 +10,7 @@ public class WehicleLogger {
     public WehicleLogger() throws FileNotFoundException {
     }
 
-    public void log_Writer(String log) throws IOException {
+    public synchronized void log_Writer(String log) throws IOException {
         log_Writer = new FileWriter(fileName);
         log_Writer.write(log + "\n");
 
@@ -18,7 +18,7 @@ public class WehicleLogger {
     }
 
 
-    public void read() throws IOException {
+    public synchronized void read() throws IOException {
         log_Reader = new FileReader(fileName);
         read = new BufferedReader(log_Reader);
         if (read.ready()) {

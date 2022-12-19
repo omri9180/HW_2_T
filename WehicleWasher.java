@@ -2,9 +2,9 @@ import java.io.File;
 import java.util.*;
 
 public class WehicleWasher {
-    Set<Wehicle> whashPlace;
+    ArrayList<Wehicle> whashPlace;
     Queue<Wehicle> line;
-    Set<Wehicle> inWash;
+    ArrayList<Wehicle> inWash;
     Queue<Car> cars;
     Queue<SUV> SUVs;
     Queue<MiniBus> miniBuses;
@@ -18,9 +18,9 @@ public class WehicleWasher {
         this.avgBetweenCars = timeForWash;
         this.needToBeWash = needToBeWash;
         this.avgBetweenCars = avgBetweenCars;
-        whashPlace = new HashSet<Wehicle>();
+        whashPlace = new ArrayList<Wehicle>();
         line = new LinkedList<Wehicle>();
-        inWash = new HashSet<Wehicle>();
+        inWash = new ArrayList<Wehicle>();
         cars = new LinkedList<Car>();
         SUVs = new LinkedList<SUV>();
         miniBuses = new LinkedList<MiniBus>();
@@ -38,6 +38,24 @@ public class WehicleWasher {
 
 
         }
+    }
+
+    public boolean empty_spot(){
+        if(whashPlace.isEmpty() && whashPlace.get(needToBeWash-1) !=null){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public synchronized void q_to_washer(Wehicle w) throws InterruptedException {
+        if(empty_spot() == false){
+            line.add(w);
+            w.wait();
+        }else {
+            inWash.add(w);
+        }
+
     }
 
     public Wehicle chosenWehicle() {

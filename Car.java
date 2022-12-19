@@ -2,6 +2,9 @@ public class Car extends Wehicle{
     public Car() {
         super("car");
     }
+
+
+
     public void wehicleArraiv() {
         System.out.println(this.getClass().getName() + " Arraived to washer");
     }
