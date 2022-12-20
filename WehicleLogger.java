@@ -1,12 +1,8 @@
 import java.io.*;
 
 public class WehicleLogger {
-
-
     public WehicleLogger() throws IOException {
     }
-
-
     public synchronized void log_Writer(String log) throws IOException {
         FileWriter fw = new FileWriter("log.txt", true);
         BufferedWriter log_w = new BufferedWriter(fw);
@@ -16,8 +12,6 @@ public class WehicleLogger {
         log_w.close();
         fw.close();
     }
-
-
     public synchronized void read() throws IOException {
         FileReader fr = new FileReader("log.txt");
         if (fr.ready()) {

@@ -2,59 +2,48 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
 public class WehicleWasher {
-
-    int num_station = 0;
-    ArrayList<Wehicle> wehicles_inWash;//in wash list
-    ArrayList<Wehicle> wehicles;//
+    Scanner input = new Scanner(System.in);
     int num_of_wehicle;
+    int num_wash_st;
+    ArrayList<Wehicle> wehicles_inWash;
+    ArrayList<Wehicle> wehicles_q;
+
+    ArrayList<Wehicle> wehicles;
     ArrayList<Wehicle> cars_after_wash = new ArrayList<>();
     ArrayList<Wehicle> suv_after_wash = new ArrayList<>();
     ArrayList<Wehicle> truck_after_wash = new ArrayList<>();
     ArrayList<Wehicle> minibus_after_wash = new ArrayList<>();
     WehicleLogger log;
-    int num_wash_st;
-
 
     public WehicleWasher() throws FileNotFoundException {
-        Scanner in = new Scanner(System.in);
+
         System.out.println("Enter number of washing stations");
-        this.num_wash_st = in.nextInt();
+        this.num_wash_st = input.nextInt();
         this.wehicles_inWash = new ArrayList<>(num_wash_st);
-        System.out.println("How many vehicles will be washed today?");
-        this.num_of_wehicle = in.nextInt();
-        this.wehicles = new ArrayList<>();
+        System.out.println("How many vehicles to washe?");
+        this.num_of_wehicle = input.nextInt();
+        this.wehicles_q = new ArrayList<>();
+        this.wehicles = new ArrayList<>(num_of_wehicle);
 
 
     }
 
     public synchronized void in_wash(Wehicle v) {
-        //get a vehicle and inserts it into the inwash list, also searches for it in the main cars list and remove it from there, will update count of both lists
-        for (int i = 0; i < wehicles.size(); i++) {
-            if (wehicles.get(i).equals(v)) {
-                wehicles.remove(i);
-            }
+            wehicles_inWash.add(v);
         }
-        wehicles_inWash.add(v);
-        num_station++;
-
-
-    }
-
     public synchronized void finished_wash(Wehicle w) {
-        for (int i = 0; i < num_station; i++) {
+        for (int i = 0; i < wehicles_inWash.size(); i++) {
             if (wehicles_inWash.get(i).equals(w)) {
                 wehicles_inWash.remove(i);
-                num_station--;
             }
+
         }
         switch (w.getType()) {
             case ("Car"): {
                 cars_after_wash.add(w);
                 break;
             }
-
             case ("SUV"): {
                 suv_after_wash.add(w);
                 break;
@@ -64,12 +53,10 @@ public class WehicleWasher {
                 truck_after_wash.add(w);
                 break;
             }
-
             case ("MiniBus"): {
                 minibus_after_wash.add(w);
                 break;
             }
-
         }
     }
 
