@@ -1,21 +1,11 @@
-public class Car extends Wehicle{
-    public Car() {
-        super("car");
+import java.io.IOException;
+import java.util.concurrent.Semaphore;
+
+public class Car extends Wehicle {
+    //car class exntends vehicle and in its constructor updates its type
+    public Car (WehicleWasher washer) throws IOException {
+        super(washer);
+        type ="Car";
     }
 
-
-
-    public void wehicleArraiv() {
-        System.out.println(this.getClass().getName() + " Arraived to washer");
-    }
-
-    @Override
-    public void wehicleEnter_washer() {
-        System.out.println(this.getClass().getName() + " Entered wash station");
-    }
-
-    @Override
-    public void wehicle_finish() {
-        System.out.println(this.getClass().getName() + " Washed");
-    }
 }

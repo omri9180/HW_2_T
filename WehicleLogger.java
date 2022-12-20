@@ -1,32 +1,37 @@
 import java.io.*;
 
 public class WehicleLogger {
-    File fileName = new File("log.txt");
-    private FileWriter log_Writer;
 
-    private FileReader log_Reader = new FileReader(fileName);
-    private BufferedReader read;
 
-    public WehicleLogger() throws FileNotFoundException {
+    public WehicleLogger() throws IOException {
     }
 
-    public synchronized void log_Writer(String log) throws IOException {
-        log_Writer = new FileWriter(fileName);
-        log_Writer.write(log + "\n");
 
-        log_Writer.close();
+    public synchronized void log_Writer(String log) throws IOException {
+        FileWriter fw = new FileWriter("log.txt", true);
+        BufferedWriter log_w = new BufferedWriter(fw);
+        log_w.write( log);
+        log_w.newLine();
+
+        log_w.close();
+        fw.close();
     }
 
 
     public synchronized void read() throws IOException {
-        log_Reader = new FileReader(fileName);
-        read = new BufferedReader(log_Reader);
-        if (read.ready()) {
-            while (read.ready()) {
-                System.out.println(read.readLine());
+        FileReader fr = new FileReader("log.txt");
+        if (fr.ready()) {
+            BufferedReader log_r = new BufferedReader(fr);
+            String log_rd = log_r.readLine();
+            while (log_rd != null) {
+                System.out.println(log_rd);
+                log_rd = log_r.readLine();
             }
+            log_r.close();
+        } else {
+            throw new FileNotFoundException();
         }
-        read.close();
-        log_Reader.close();
+
+        fr.close();
     }
 }

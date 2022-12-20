@@ -1,87 +1,76 @@
-import java.io.File;
-import java.util.*;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 
 public class WehicleWasher {
-    ArrayList<Wehicle> wash_station;
-    ArrayList<Wehicle> line_to_wash;
-    ArrayList<Wehicle> wehicles_in_wash;
-    ArrayList<Car> cars_after_wash;
-    ArrayList<SUV> SUVs_after_wash;
-    ArrayList<MiniBus> miniBuses_after_wash;
-    ArrayList<Truck> trucks_after_wash;
 
-    WehicleLogger log_w_r;
+    int num_station = 0;
+    ArrayList<Wehicle> wehicles_inWash;//in wash list
+    ArrayList<Wehicle> wehicles;//
+    int num_of_wehicle;
+    ArrayList<Wehicle> cars_after_wash = new ArrayList<>();
+    ArrayList<Wehicle> suv_after_wash = new ArrayList<>();
+    ArrayList<Wehicle> truck_after_wash = new ArrayList<>();
+    ArrayList<Wehicle> minibus_after_wash = new ArrayList<>();
+    WehicleLogger log;
+    int num_wash_st;
 
-    int needToBeWash;
-    double avgBetweenCars;
-    double avgTimeToWash;
-    Random rnd;
 
-    public WehicleWasher(int num_of_station, int num_wehicle_to_wash) {
-        wash_station = new ArrayList<>(num_of_station);
-        this.needToBeWash = num_wehicle_to_wash;
-        line_to_wash = new ArrayList<>();
-        wehicles_in_wash = new ArrayList<>();
+    public WehicleWasher() throws FileNotFoundException {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter number of washing stations");
+        this.num_wash_st = in.nextInt();
+        this.wehicles_inWash = new ArrayList<>(num_wash_st);
+        System.out.println("How many vehicles will be washed today?");
+        this.num_of_wehicle = in.nextInt();
+        this.wehicles = new ArrayList<>();
+
 
     }
 
-
-    public void proses() throws InterruptedException {
-        int lineCounter = 0;
-        while (lineCounter < needToBeWash) {
-            Thread.sleep((long) (-Math.log(rnd.nextDouble()) / avgBetweenCars));
-            line_to_wash.add(chosenWehicle());
-            lineCounter++;
-
-
+    public synchronized void in_wash(Wehicle v) {
+        //get a vehicle and inserts it into the inwash list, also searches for it in the main cars list and remove it from there, will update count of both lists
+        for (int i = 0; i < wehicles.size(); i++) {
+            if (wehicles.get(i).equals(v)) {
+                wehicles.remove(i);
+            }
         }
+        wehicles_inWash.add(v);
+        num_station++;
+
+
     }
 
-    public boolean empty_spot() {
-        if (wash_station.isEmpty() && wash_station.get(needToBeWash - 1) != null) {
-            return true;
-        } else {
-            return false;
+    public synchronized void finished_wash(Wehicle w) {
+        for (int i = 0; i < num_station; i++) {
+            if (wehicles_inWash.get(i).equals(w)) {
+                wehicles_inWash.remove(i);
+                num_station--;
+            }
         }
-    }
-
-    public synchronized void q_to_washer(Wehicle w) throws InterruptedException {
-        if (empty_spot() == false) {
-            line_to_wash.add(w);
-            w.wait();
-        } else {
-            wehicles_in_wash.add(w);
-        }
-
-    }
-
-    public void new_wehicle_toWash() {
-        if (empty_spot()) {
-            wash_station.add(line_to_wash.get(0));
-        }
-    }
-
-    public Wehicle chosenWehicle() {
-        Random rnd = new Random();
-        int n = rnd.nextInt(3) + 1;
-        Wehicle w = null;
-        switch (n) {
-            case 0:
-                w = new Truck();
+        switch (w.getType()) {
+            case ("Car"): {
+                cars_after_wash.add(w);
                 break;
-            case 1:
-                w = new SUV();
-                break;
-            case 2:
-                w = new Car();
-                break;
+            }
 
-            case 3:
-                w = new MiniBus();
+            case ("SUV"): {
+                suv_after_wash.add(w);
                 break;
+            }
+
+            case ("Truck"): {
+                truck_after_wash.add(w);
+                break;
+            }
+
+            case ("MiniBus"): {
+                minibus_after_wash.add(w);
+                break;
+            }
 
         }
-        return w;
-
     }
+
 }

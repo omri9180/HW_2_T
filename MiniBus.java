@@ -1,19 +1,10 @@
+import java.io.IOException;
+import java.util.concurrent.Semaphore;
+
 public class MiniBus extends Wehicle{
-    public MiniBus() {
-        super("Mini Bus");
-
-    }
-    public void wehicleArraiv() {
-        System.out.println(this.getClass().getName() + " Arraived to washer");
-    }
-
-    @Override
-    public void wehicleEnter_washer() {
-        System.out.println(this.getClass().getName() + " Entered wash station");
-    }
-
-    @Override
-    public void wehicle_finish() {
-        System.out.println(this.getClass().getName() + " Washed");
+    //MiniBus class exntends vehicle and in its constructor updates its type 
+    public MiniBus (WehicleWasher washer) throws IOException {
+        super(washer);
+        type = "MiniBus";
     }
 }
